@@ -365,11 +365,10 @@ build {
 ##    inline           = ["pwsh -File ${var.image_folder}/SoftwareReport/SoftwareReport.Generator.ps1 -OutputDirectory ${var.image_folder}", "pwsh -File ${var.image_folder}/tests/RunAll-Tests.ps1 -OutputDirectory ${var.image_folder}"]
 ##  }
 #
-#  provisioner "file" {
-#    destination = "${path.root}/Ubuntu2204-Readme.md"
-#    direction   = "download"
-#    source      = "${var.image_folder}/Ubuntu-Readme.md"
-#  }
+  provisioner "file" {
+    destination = "${path.root}/Ubuntu2204-Readme.md"
+    source      = "${path.root}/Ubuntu2204-Readme.md"
+  }
 #
 #  provisioner "shell" {
 #    environment_vars = ["HELPER_SCRIPT_FOLDER=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}", "IMAGE_FOLDER=${var.image_folder}"]
