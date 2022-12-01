@@ -165,4 +165,4 @@ rm -f /usr/share/keyrings/adoptium.gpg
 rm -f /usr/share/keyrings/zulu.gpg
 
 reloadEtcEnvironment
-invoke_tests "Java"
+#invoke_tests "Java"

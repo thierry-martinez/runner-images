@@ -30,4 +30,4 @@ ln -s "$SWIFT_LIB_ROOT/libsourcekitdInProc.so" /usr/local/lib/libsourcekitdInPro
 
 echo "SWIFT_PATH=$SWIFT_BIN_ROOT" | tee -a /etc/environment
 
-invoke_tests "Common" "Swift"
+#invoke_tests "Common" "Swift"

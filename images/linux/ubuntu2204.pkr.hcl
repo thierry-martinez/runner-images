@@ -144,43 +144,29 @@ variable "vm_size" {
   type    = string
   default = "Standard_D4s_v4"
 }
-
-source "azure-arm" "build_vhd" {
-  allowed_inbound_ip_addresses           = "${var.allowed_inbound_ip_addresses}"
-  build_resource_group_name              = "${var.build_resource_group_name}"
-  capture_container_name                 = "images"
-  capture_name_prefix                    = "${var.capture_name_prefix}"
-  client_id                              = "${var.client_id}"
-  client_secret                          = "${var.client_secret}"
-  client_cert_path                       = "${var.client_cert_path}"
-  image_offer                            = "0001-com-ubuntu-server-jammy"
-  image_publisher                        = "canonical"
-  image_sku                              = "22_04-lts"
-  location                               = "${var.location}"
-  os_disk_size_gb                        = "86"
-  os_type                                = "Linux"
-  private_virtual_network_with_public_ip = "${var.private_virtual_network_with_public_ip}"
-  resource_group_name                    = "${var.resource_group}"
-  storage_account                        = "${var.storage_account}"
-  subscription_id                        = "${var.subscription_id}"
-  temp_resource_group_name               = "${var.temp_resource_group_name}"
-  tenant_id                              = "${var.tenant_id}"
-  virtual_network_name                   = "${var.virtual_network_name}"
-  virtual_network_resource_group_name    = "${var.virtual_network_resource_group_name}"
-  virtual_network_subnet_name            = "${var.virtual_network_subnet_name}"
-  vm_size                                = "${var.vm_size}"
-
-  dynamic "azure_tag" {
-    for_each = var.azure_tag
-    content {
-      name = azure_tag.key
-      value = azure_tag.value
-    }
-  }
+source "qemu" "example" {
+  iso_url           = "file:///builds/ubuntu.img"
+  iso_checksum = "sha256:06d14f75543ec4b4364e01eb58053946bd82fc3e8708503fa2af9da41cf8e5b8"
+  disk_image = true
+  use_backing_file = true
+  output_directory  = "output_kvm_runner"
+  shutdown_command  = "echo 'packer' | sudo -S shutdown -P now"
+  disk_size         = "160G"
+  format            = "qcow2"
+  accelerator       = "kvm"
+  ssh_username      = "kvm-runner"
+  ssh_password      = "kvm-runner"
+  ssh_timeout       = "20m"
+  vm_name           = "kvm-runner"
+  net_device        = "virtio-net"
+  disk_interface    = "virtio"
+  boot_wait         = "10s"
+  memory = 2048
+  headless = true
 }
 
 build {
-  sources = ["source.azure-arm.build_vhd"]
+  sources = ["source.qemu.example"]
 
   provisioner "shell" {
     execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
@@ -257,11 +243,11 @@ build {
     scripts          = ["${path.root}/scripts/installers/complete-snap-setup.sh", "${path.root}/scripts/installers/powershellcore.sh"]
   }
 
-  provisioner "shell" {
-    environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}"]
-    execute_command  = "sudo sh -c '{{ .Vars }} pwsh -f {{ .Path }}'"
-    scripts          = ["${path.root}/scripts/installers/Install-PowerShellModules.ps1", "${path.root}/scripts/installers/Install-AzureModules.ps1"]
-  }
+#  provisioner "shell" {
+#    environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}"]
+#    execute_command  = "sudo sh -c '{{ .Vars }} pwsh -f {{ .Path }}'"
+#    scripts          = ["${path.root}/scripts/installers/Install-PowerShellModules.ps1", "${path.root}/scripts/installers/Install-AzureModules.ps1"]
+#  }
 
   provisioner "shell" {
     environment_vars = ["HELPER_SCRIPTS=${var.helper_script_folder}", "INSTALLER_SCRIPT_FOLDER=${var.installer_script_folder}", "DOCKERHUB_LOGIN=${var.dockerhub_login}", "DOCKERHUB_PASSWORD=${var.dockerhub_password}"]
@@ -406,9 +392,9 @@ build {
     inline          = ["mkdir -p /etc/vsts", "cp /tmp/ubuntu2204.conf /etc/vsts/machine_instance.conf"]
   }
 
-  provisioner "shell" {
-    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
-    inline          = ["sleep 30", "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"]
-  }
+#  provisioner "shell" {
+#    execute_command = "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+#    inline          = ["sleep 30", "/usr/sbin/waagent -force -deprovision+user && export HISTSIZE=0 && sync"]
+#  }
 
 }

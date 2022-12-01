@@ -22,4 +22,4 @@ download_with_retries $zipUrl "/tmp" $zipName
 unzip /tmp/${zipName} -d /tmp
 /tmp/install
 
-invoke_tests "CLI.Tools" "AWS"
+#invoke_tests "CLI.Tools" "AWS"

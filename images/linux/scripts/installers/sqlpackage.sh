@@ -22,4 +22,4 @@ rm -f sqlpackage.zip
 chmod +x /usr/local/sqlpackage/sqlpackage
 ln -sf /usr/local/sqlpackage/sqlpackage /usr/local/bin
 
-invoke_tests "Tools" "SqlPackage"
+#invoke_tests "Tools" "SqlPackage"

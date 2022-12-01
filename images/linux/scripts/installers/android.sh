@@ -121,4 +121,4 @@ fi
 chmod -R a+rwx ${ANDROID_SDK_ROOT}
 
 reloadEtcEnvironment
-invoke_tests "Android"
+#invoke_tests "Android"

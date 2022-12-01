@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 ################################################################################
 ##  File:  dotnetcore-sdk.sh
 ##  Desc:  Installs .NET Core SDK
@@ -76,23 +76,23 @@ extract_dotnet_sdk() {
 export -f download_with_retries
 export -f extract_dotnet_sdk
 
-parallel --jobs 0 --halt soon,fail=1 \
-    'url="https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{}/dotnet-sdk-{}-linux-x64.tar.gz"; \
-    download_with_retries $url' ::: "${sortedSdks[@]}"
+#parallel --jobs 0 --halt soon,fail=1 \
+#    'url="https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{}/dotnet-sdk-{}-linux-x64.tar.gz"; \
+#    download_with_retries $url' ::: "${sortedSdks[@]}"
+#
+#find . -name "*.tar.gz" | parallel --halt soon,fail=1 'extract_dotnet_sdk {}'
+#
+## NuGetFallbackFolder at /usr/share/dotnet/sdk/NuGetFallbackFolder is warmed up by smoke test
+## Additional FTE will just copy to ~/.dotnet/NuGet which provides no benefit on a fungible machine
+#setEtcEnvironmentVariable DOTNET_SKIP_FIRST_TIME_EXPERIENCE 1
+#setEtcEnvironmentVariable DOTNET_NOLOGO 1
+#setEtcEnvironmentVariable DOTNET_MULTILEVEL_LOOKUP 0
+#prependEtcEnvironmentPath '$HOME/.dotnet/tools'
+#
+## install dotnet tools
+#for dotnet_tool in ${DOTNET_TOOLS[@]}; do
+#    echo "Installing dotnet tool $dotnet_tool"
+#    dotnet tool install $dotnet_tool --tool-path '/etc/skel/.dotnet/tools'
+#done
 
-find . -name "*.tar.gz" | parallel --halt soon,fail=1 'extract_dotnet_sdk {}'
-
-# NuGetFallbackFolder at /usr/share/dotnet/sdk/NuGetFallbackFolder is warmed up by smoke test
-# Additional FTE will just copy to ~/.dotnet/NuGet which provides no benefit on a fungible machine
-setEtcEnvironmentVariable DOTNET_SKIP_FIRST_TIME_EXPERIENCE 1
-setEtcEnvironmentVariable DOTNET_NOLOGO 1
-setEtcEnvironmentVariable DOTNET_MULTILEVEL_LOOKUP 0
-prependEtcEnvironmentPath '$HOME/.dotnet/tools'
-
-# install dotnet tools
-for dotnet_tool in ${DOTNET_TOOLS[@]}; do
-    echo "Installing dotnet tool $dotnet_tool"
-    dotnet tool install $dotnet_tool --tool-path '/etc/skel/.dotnet/tools'
-done
-
-invoke_tests "DotnetSDK"
+#invoke_tests "DotnetSDK"

@@ -46,4 +46,4 @@ ln -s $EDGEDRIVER_BIN /usr/bin
 
 echo "EDGEWEBDRIVER=$EDGEDRIVER_DIR" | tee -a /etc/environment
 
-invoke_tests "Browsers" "Edge"
+#invoke_tests "Browsers" "Edge"

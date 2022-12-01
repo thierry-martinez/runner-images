@@ -52,4 +52,4 @@ aws_helper_url=$(curl "${authString[@]}" -sL $aws_latest_release_url | jq -r '.b
 download_with_retries "$aws_helper_url" "/usr/bin" docker-credential-ecr-login
 chmod +x /usr/bin/docker-credential-ecr-login
 
-invoke_tests "Tools" "Docker"
+#invoke_tests "Tools" "Docker"

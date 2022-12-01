@@ -13,4 +13,4 @@ download_with_retries "${URL}" "/tmp" "${ZIP_NAME}"
 unzip -qq "/tmp/${ZIP_NAME}" -d /usr/local/bin
 rm -f "/tmp/${ZIP_NAME}"
 
-invoke_tests "Tools" "Terraform"
+#invoke_tests "Tools" "Terraform"
