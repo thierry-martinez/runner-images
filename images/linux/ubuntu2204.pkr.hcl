@@ -368,7 +368,7 @@ build {
   provisioner "file" {
     destination = "${path.root}/Ubuntu2204-Readme.md"
     direction   = "download"
-    source      = "${var.image_folder}/Ubuntu-Readme.md"
+    source      = "${path.root}/Ubuntu2204-Readme.md"
   }
 
   provisioner "shell" {
